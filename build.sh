@@ -4,16 +4,23 @@
 sudo yum update -y
 
 sudo yum -y groupinstall development
+sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel
+sudo yum install -y gcc-c++ gcc python-devel chrpath
+mkdir -p lambda-package/cv2 build/numpy
+
 wget https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
 tar xJf Python-3.6.3.tar.xz
 cd Python-3.6.3
 ./configure
 make
 sudo make install
+cd ~
 
-cd ..
-sudo yum install -y git gcc-c++ gcc python-devel chrpath
-mkdir -p lambda-package/cv2 build/numpy
+# Build numpy
+sudo /usr/local/bin/pip3.6 install numpy
+cp -rf /usr/local/lib64/python3.6/site-packages/numpy lambda-package
+
+
 
 # cmake
 version=3.5
@@ -28,10 +35,6 @@ cd cmake-$version.$build/
 make -j2
 sudo make install
 cd ~
-
-# Build numpy
-sudo /usr/local/bin/pip3.6 install numpy
-cp -rf /usr/local/lib64/python3.6/site-packages/numpy lambda-package
 
 alias python=python3.6
 # Build OpenCV 3.2
